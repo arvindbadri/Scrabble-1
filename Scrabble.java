@@ -12,11 +12,15 @@ public class Scrabble {
 	private static int maxScore = 0;
 	private static String maxWord = "";
 	private static final char DO_NOT_OMIT_CHARACTERS = ' ';
-
+	private static char letter='k';
+	private static int pos=4;
+	private static int gaps=7;
 	// Main function calling all the other functions
 	public static void main(String[] args) {
 
-		String rack = "zzaaaaa";
+		String rack = "kindamn";
+
+		rack=rack+letter;
 
 		boolean containsSpace;
 		containsSpace=rack.contains(" ");
@@ -47,6 +51,18 @@ public class Scrabble {
 		return maxWord;
 	}
 
+	public static int getGaps(){
+		return gaps;
+	}
+
+	public static int getPos(){
+		return pos;
+	}
+
+	public static char getChar(){
+		return letter;
+	}
+
 	public static void makeCombinationsAndCheck(HashMap<String,ArrayList<Integer>> hash, String inputstring,int[] scores, ArrayList<String> words) {
 		StringBuilder output = new StringBuilder();
 		combine(hash,inputstring,output,scores,words);
@@ -75,8 +91,17 @@ public class Scrabble {
 			String temp = String.copyValueOf(oArr);
 			if(hash.containsKey(temp))
 				if(calcScore(oStr,scores) > maxScore) {
-					maxScore = calcScore(oStr,scores, characterToOmit);
-					maxWord = words.get(hash.get(temp).get(0));
+					//maxScore = calcScore(oStr,scores, characterToOmit);
+					//maxWord = words.get(hash.get(temp).get(0));
+					String tempstr;
+					for(int j : hash.get(temp)){
+						tempstr=words.get(j);
+						if(tempstr.length()<=getGaps() && tempstr.indexOf(getChar())+1<=getPos() && tempstr.length()-(tempstr.indexOf(getChar())+1) <= getGaps()- getPos() ){
+							maxScore = calcScore(oStr,scores, characterToOmit);
+							maxWord = tempstr;
+						}
+					}
+
 				}
 
 			if ( i < inputstring.length() )
